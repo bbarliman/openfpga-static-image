@@ -1,0 +1,33 @@
+{
+    "core": {
+        "metadata": {
+            "platform_ids": ["staticimage"],
+            "target_id": "staticimage",
+            "title": "Static Image Viewer 800p",
+            "description": "Displays a high-res 800x800 static image.",
+            "author": "MyName",
+            "version": "2.0.0",
+            "release_date": "2026-10-01"
+        },
+        "framework": {
+            "hardware": {
+                "fpga": "5CEBA4F23C8",
+                "clocks": [
+                    { "frequency": 50000000, "type": "sys" } 
+                ]
+            },
+            "system": {
+                "file_slots": [
+                    {
+                        "id": 1,
+                        "name": "image",
+                        "required": true,
+                        "extension": "bin",
+                        "address": "0x40000000"
+                    }
+                ]
+            }
+        }
+    }
+}
+
