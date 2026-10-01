@@ -1,19 +1,20 @@
 {
     "core": {
+        "magic": "APF_VER_1",
         "metadata": {
             "platform_ids": ["staticimage"],
-            "target_id": "staticimage",
-            "title": "Static Image Viewer 800p",
-            "description": "Displays a high-res 800x800 static image.",
+            "shortname": "staticimage",
+            "description": "True Color 800x800 Image Viewer",
             "author": "MyName",
+            "url": "https://github.com",
             "version": "2.0.0",
-            "release_date": "2026-10-01"
+            "date_release": "2026-10-01"
         },
         "framework": {
             "hardware": {
                 "fpga": "5CEBA4F23C8",
                 "clocks": [
-                    { "frequency": 50000000, "type": "sys" } 
+                    { "frequency": 50000000, "type": "sys" }
                 ]
             },
             "system": {
