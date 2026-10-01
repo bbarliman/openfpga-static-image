@@ -1,4 +1,4 @@
-module video_pipeline (
+module top (
     input  wire        clk_pixel,    // Pixel clock input (Target ~38.0 MHz for 720x720 @ 60Hz)
     input  wire        rst,          // Reset signal (active high)
     
