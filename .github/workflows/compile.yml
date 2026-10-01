@@ -18,7 +18,7 @@ jobs:
           args: >
             sh -c "
             quartus_sh --flow compile top && 
-            quartus_cpf -c --rbf_byte_ratio=1 build/top.sof SD_Card_Root/Cores/MyName.StaticImage/core.rbf
+            quartus_cpf -c build/top.sof SD_Card_Root/Cores/MyName.StaticImage/core.rbf
             "
 
       - name: Upload Finished Files
