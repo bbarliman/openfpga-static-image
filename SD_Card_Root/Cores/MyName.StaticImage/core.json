@@ -2,9 +2,9 @@
     "core": {
         "magic": "APF_VER_1",
         "metadata": {
-            "platform_ids": ["staticimage"],
+            "platform_ids": ["ap1"],
             "shortname": "staticimage",
-            "description": "True Color 800x800 Image Viewer",
+            "description": "True Color Full Screen Image Viewer",
             "author": "MyName",
             "url": "https://github.com",
             "version": "2.0.0",

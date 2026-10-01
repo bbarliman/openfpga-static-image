@@ -1,94 +1,79 @@
-module top (
-    // Core System Clocks
-    input  wire        clk_sys,
-
-    // Analogue OS External Memory Bus Bridge Connections
-    output wire [21:0] sram_addr,
-    input  wire [15:0] sram_data,
-
-    // Native Video Multiplexer Bus Outputs
-    output reg         video_hs,
-    output reg         video_vs,
-    output reg         video_de,
-    output reg  [7:0]  video_r,
-    output reg  [7:0]  video_g,
-    output reg  [7:0]  video_b
+module video_pipeline (
+    input  wire        clk_pixel,    // Pixel clock input (Target ~38.0 MHz for 720x720 @ 60Hz)
+    input  wire        rst,          // Reset signal (active high)
+    
+    // Video Output Signals to APF Bridge
+    output reg         vga_hsync,
+    output reg         vga_vsync,
+    output reg         vga_blank,    // Active when outside visible screen area
+    output reg  [15:0] vga_rgb,      // 16-bit color (RGB565 format)
+    
+    // Memory Interface
+    output reg  [19:0] mem_address   // 720 * 720 = 518,400 pixels (Fits inside 20 bits)
 );
 
-    // Video Frame Generation Timings for 800x800
-    reg [10:0] h_count = 0;
-    reg [10:0] v_count = 0;
+    // Custom 720x720 Square Canvas Hardware Timing Matrix
+    localparam H_ACTIVE = 720;
+    localparam H_FRONT  = 32;
+    localparam H_SYNC   = 96;
+    localparam H_BACK   = 64;
+    localparam H_TOTAL  = 912;
 
-    localparam H_ACTIVE = 800;
-    localparam H_FRONT  = 40;
-    localparam H_SYNC   = 128;
-    localparam H_BACK   = 88;
-    localparam H_TOTAL  = H_ACTIVE + H_FRONT + H_SYNC + H_BACK;
+    localparam V_ACTIVE = 720;
+    localparam V_FRONT  = 1;
+    localparam V_SYNC   = 4;
+    localparam V_BACK   = 23;
+    localparam V_TOTAL  = 748;
 
-    localparam V_ACTIVE = 800;
-    localparam V_FRONT  = 10;
-    localparam V_SYNC   = 2;
-    localparam V_BACK   = 25;
-    localparam V_TOTAL  = V_ACTIVE + V_FRONT + V_SYNC + V_BACK;
+    // Coordinate Tracking Registers (10 bits handle values up to 1023)
+    reg [9:0] h_count;
+    reg [9:0] v_count;
+    wire video_active;
 
-    always @(posedge clk_sys) begin
-        if (h_count == H_TOTAL - 1) begin
+    // Matrix Coordinate Counters
+    always @(posedge clk_pixel or posedge rst) begin
+        if (rst) begin
             h_count <= 0;
-            if (v_count == V_TOTAL - 1) begin
-                v_count <= 0;
+            v_count <= 0;
+        end else begin
+            if (h_count == H_TOTAL - 1) begin
+                h_count <= 0;
+                if (v_count == V_TOTAL - 1) begin
+                    v_count <= 0;
+                end else begin
+                    v_count <= v_count + 1;
+                end
             end else begin
-                v_count <= v_count + 1;
+                h_count <= h_count + 1;
             end
-        end else begin
-            h_count <= h_count + 1;
         end
     end
 
-    // Signal Generation for Sync and Data Enable Matrix
-    always @(posedge clk_sys) begin
-        video_hs <= !((h_count >= (H_ACTIVE + H_FRONT)) && (h_count < (H_ACTIVE + H_FRONT + H_SYNC)));
-        video_vs <= !((v_count >= (V_ACTIVE + V_FRONT)) && (v_count < (V_ACTIVE + V_FRONT + V_SYNC)));
-        video_de <= (h_count < H_ACTIVE) && (v_count < V_ACTIVE);
+    // Verify Active Display Region Boundings
+    assign video_active = (h_count < H_ACTIVE) && (v_count < V_ACTIVE);
+
+    // Output Sync Latency Alignment (Inverted logic for standard framework bus sync)
+    always @(posedge clk_pixel) begin
+        vga_hsync <= ~((h_count >= (H_ACTIVE + H_FRONT)) && (h_count < (H_ACTIVE + H_FRONT + H_SYNC)));
+        vga_vsync <= ~((v_count >= (V_ACTIVE + V_FRONT)) && (v_count < (V_ACTIVE + V_FRONT + V_SYNC)));
+        vga_blank <= ~video_active;
     end
 
-    // Address Lookahead Calculation (Offset by 1 clock cycle for RAM latency)
-    wire [10:0] next_h = (h_count == H_TOTAL - 1) ? 11'd0 : h_count + 11'd1;
-    wire [10:0] next_v = (h_count == H_TOTAL - 1) ? ((v_count == V_TOTAL - 1) ? 11'd0 : v_count + 11'd1) : v_count;
-    
-    wire [21:0] pixel_index = (next_v * 22'd800) + next_h;
-    
-    reg fetch_phase = 0;
-    always @(posedge clk_sys) begin
-        fetch_phase <= ~fetch_phase;
-    end
-
-    // Direct mapping to the external RAM bus
-    assign sram_addr = (next_v < 800 && next_h < 800) ? {pixel_index[20:0], fetch_phase} : 22'd0;
-
-    // Color Reconstruction Buffer (Assembling two 16-bit words into a 24-bit pixel)
-    reg [7:0] r_buf;
-    reg [7:0] g_buf;
-    reg [7:0] b_buf;
-
-    always @(posedge clk_sys) begin
-        if (!fetch_phase) begin
-            r_buf <= sram_data[7:0];
+    // Address Sequencing Engine
+    always @(posedge clk_pixel or posedge rst) begin
+        if (rst) begin
+            mem_address <= 0;
+            vga_rgb     <= 16'h0000;
         end else begin
-            g_buf <= sram_data[15:8];
-            b_buf <= sram_data[7:0];
-        end
-    end
-
-    // Output mapped color components to the video bus
-    always @(posedge clk_sys) begin
-        if (video_de) begin
-            video_r <= r_buf;
-            video_g <= g_buf;
-            video_b <= b_buf;
-        end else begin
-            video_r <= 8'd0;
-            video_g <= 8'd0;
-            video_b <= 8'd0;
+            if (video_active) begin
+                // Increments linearly across 518,400 address points
+                mem_address <= (v_count * H_ACTIVE) + h_count;
+                
+                // Hardware visual diagnostic pattern (color ramp matrix)
+                vga_rgb     <= {h_count[4:0], v_count[5:0], h_count[4:0]}; 
+            end else begin
+                vga_rgb     <= 16'h0000; // Pin output to absolute black during blanking intervals
+            end
         end
     end
 
