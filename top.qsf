@@ -5,51 +5,87 @@ set_global_assignment -name VERILOG_FILE src/top.v
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY build
 set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
 
-# --- Video Red Bus ---
-set_location_assignment PIN_H18 -to video_r_0
-set_location_assignment PIN_A17 -to video_r_1
-set_location_assignment PIN_B17 -to video_r_2
-set_location_assignment PIN_C18 -to video_r_3
-set_location_assignment PIN_D18 -to video_r_4
-set_location_assignment PIN_E18 -to video_r_5
-set_location_assignment PIN_G17 -to video_r_6
-set_location_assignment PIN_G18 -to video_r_7
+# --- Core Clock System ---
+set_location_assignment PIN_M9 -to clk_sys
 
-# --- Video Green Bus ---
-set_location_assignment PIN_H15 -to video_g_0
-set_location_assignment PIN_B16 -to video_g_1
-set_location_assignment PIN_C16 -to video_g_2
-set_location_assignment PIN_D16 -to video_g_3
-set_location_assignment PIN_E16 -to video_g_4
-set_location_assignment PIN_F16 -to video_g_5
-set_location_assignment PIN_G16 -to video_g_6
-set_location_assignment PIN_G15 -to video_g_7
+# --- Video Output Control Bus Matrix ---
+set_location_assignment PIN_H16 -to video_hs
+set_location_assignment PIN_A15 -to video_vs
+set_location_assignment PIN_A14 -to video_de
 
-# --- Video Blue Bus ---
-set_location_assignment PIN_A13 -to video_b_0
-set_location_assignment PIN_B13 -to video_b_1
-set_location_assignment PIN_C13 -to video_b_2
-set_location_assignment PIN_D13 -to video_b_3
-set_location_assignment PIN_E13 -to video_b_4
-set_location_assignment PIN_F13 -to video_b_5
-set_location_assignment PIN_G13 -to video_b_6
-set_location_assignment PIN_H13 -to video_b_7
+# --- Video Red Bus Output (8-bit Array) ---
+set_location_assignment PIN_H18 -to "video_r[0]"
+set_location_assignment PIN_A17 -to "video_r[1]"
+set_location_assignment PIN_B17 -to "video_r[2]"
+set_location_assignment PIN_C18 -to "video_r[3]"
+set_location_assignment PIN_D18 -to "video_r[4]"
+set_location_assignment PIN_E18 -to "video_r[5]"
+set_location_assignment PIN_G17 -to "video_r[6]"
+set_location_assignment PIN_G18 -to "video_r[7]"
 
-# --- RAM Data Bus ---
-set_location_assignment PIN_C2  -to sram_data_0
-set_location_assignment PIN_C1  -to sram_data_1
-set_location_assignment PIN_D2  -to sram_data_2
-set_location_assignment PIN_D1  -to sram_data_3
-set_location_assignment PIN_E1  -to sram_data_4
-set_location_assignment PIN_F2  -to sram_data_5
-set_location_assignment PIN_F1  -to sram_data_6
-set_location_assignment PIN_H1  -to sram_data_7
-set_location_assignment PIN_Y2  -to sram_data_8
-set_location_assignment PIN_Y1  -to sram_data_9
-set_location_assignment PIN_AA2 -to sram_data_10
-set_location_assignment PIN_AA1 -to sram_data_11
-set_location_assignment PIN_AB2 -to sram_data_12
-set_location_assignment PIN_AB1 -to sram_data_13
-set_location_assignment PIN_AC2 -to sram_data_14
-set_location_assignment PIN_AC1 -to sram_data_15
+# --- Video Green Bus Output (8-bit Array) ---
+set_location_assignment PIN_H15 -to "video_g[0]"
+set_location_assignment PIN_B16 -to "video_g[1]"
+set_location_assignment PIN_C16 -to "video_g[2]"
+set_location_assignment PIN_D16 -to "video_g[3]"
+set_location_assignment PIN_E16 -to "video_g[4]"
+set_location_assignment PIN_F16 -to "video_g[5]"
+set_location_assignment PIN_G16 -to "video_g[6]"
+set_location_assignment PIN_G15 -to "video_g[7]"
+
+# --- Video Blue Bus Output (8-bit Array) ---
+set_location_assignment PIN_A13 -to "video_b[0]"
+set_location_assignment PIN_B13 -to "video_b[1]"
+set_location_assignment PIN_C13 -to "video_b[2]"
+set_location_assignment PIN_D13 -to "video_b[3]"
+set_location_assignment PIN_E13 -to "video_b[4]"
+set_location_assignment PIN_F13 -to "video_b[5]"
+set_location_assignment PIN_G13 -to "video_b[6]"
+set_location_assignment PIN_H13 -to "video_b[7]"
+
+# --- External Cellular RAM Address Bus (22-bit Array) ---
+set_location_assignment PIN_E2  -to "sram_addr[0]"
+set_location_assignment PIN_G2  -to "sram_addr[1]"
+set_location_assignment PIN_G1  -to "sram_addr[2]"
+set_location_assignment PIN_H2  -to "sram_addr[3]"
+set_location_assignment PIN_J2  -to "sram_addr[4]"
+set_location_assignment PIN_J1  -to "sram_addr[5]"
+set_location_assignment PIN_K2  -to "sram_addr[6]"
+set_location_assignment PIN_K1  -to "sram_addr[7]"
+set_location_assignment PIN_L2  -to "sram_addr[8]"
+set_location_assignment PIN_L1  -to "sram_addr[9]"
+set_location_assignment PIN_M2  -to "sram_addr[10]"
+set_location_assignment PIN_M1  -to "sram_addr[11]"
+set_location_assignment PIN_N2  -to "sram_addr[12]"
+set_location_assignment PIN_N1  -to "sram_addr[13]"
+set_location_assignment PIN_P2  -to "sram_addr[14]"
+set_location_assignment PIN_R2  -to "sram_addr[15]"
+set_location_assignment PIN_R1  -to "sram_addr[16]"
+set_location_assignment PIN_T2  -to "sram_addr[17]"
+set_location_assignment PIN_T1  -to "sram_addr[18]"
+set_location_assignment PIN_U2  -to "sram_addr[19]"
+set_location_assignment PIN_V2  -to "sram_addr[20]"
+set_location_assignment PIN_V1  -to "sram_addr[21]"
+
+# --- External Cellular RAM Bidirectional Data Bus (16-bit Array) ---
+set_location_assignment PIN_C2  -to "sram_data[0]"
+set_location_assignment PIN_C1  -to "sram_data[1]"
+set_location_assignment PIN_D2  -to "sram_data[2]"
+set_location_assignment PIN_D1  -to "sram_data[3]"
+set_location_assignment PIN_E1  -to "sram_data[4]"
+set_location_assignment PIN_F2  -to "sram_data[5]"
+set_location_assignment PIN_F1  -to "sram_data[6]"
+set_location_assignment PIN_H1  -to "sram_data[7]"
+set_location_assignment PIN_Y2  -to "sram_data[8]"
+set_location_assignment PIN_Y1  -to "sram_data[9]"
+set_location_assignment PIN_AA2 -to "sram_data[10]"
+set_location_assignment PIN_AA1 -to "sram_data[11]"
+set_location_assignment PIN_AB2 -to "sram_data[12]"
+set_location_assignment PIN_AB1 -to "sram_data[13]"
+set_location_assignment PIN_AC2 -to "sram_data[14]"
+set_location_assignment PIN_AC1 -to "sram_data[15]"
+
+# --- Global Compilation Requirements ---
+set_global_assignment -name GENERATE_RBF_FILE ON
+set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
