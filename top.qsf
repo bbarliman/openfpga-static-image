@@ -1,3 +1,10 @@
+set_global_assignment -name FAMILY "Cyclone V"
+set_global_assignment -name DEVICE 5CEBA4F23C8
+set_global_assignment -name TOP_LEVEL_ENTITY top
+set_global_assignment -name VERILOG_FILE src/top.v
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY build
+set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
+
 # --- Video Red Bus ---
 set_location_assignment PIN_H18 -to video_r_0
 set_location_assignment PIN_A17 -to video_r_1
