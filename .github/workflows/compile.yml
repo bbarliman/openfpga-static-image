@@ -1,0 +1,28 @@
+name: Compile OpenFPGA Core
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Compile Bitstream inside Quartus Container
+        uses: docker://raetro/quartus:18.1
+        with:
+          args: >
+            sh -c "
+            quartus_sh --flow compile static_image && 
+            quartus_cpf -c --rbf_byte_ratio=1 build/static_image.sof SD_Card_Root/Cores/MyName.StaticImage/core.rbf
+            "
+
+      - name: Upload Finished Files
+        uses: actions/upload-artifact@v4
+        with:
+          name: pocket-ready-core
+          path: SD_Card_Root/
