@@ -1,0 +1,13 @@
+{
+    "platform": {
+        "version": "1.0",
+        "metadata": {
+            "name": "Static Image Viewer",
+            "description": "True Color 800x800 Image Display Core",
+            "category": "Utility",
+            "subcategories": [],
+            "manufacturer": "Custom",
+            "year": 2026
+        }
+    }
+}
