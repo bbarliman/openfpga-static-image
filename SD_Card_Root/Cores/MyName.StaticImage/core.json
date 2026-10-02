@@ -2,7 +2,9 @@
     "core": {
         "magic": "APF_VER_1",
         "metadata": {
-            "platform_ids": ["ap1"],
+            "platform_ids": [
+                "ap1"
+            ],
             "shortname": "staticimage",
             "description": "True Color Full Screen Image Viewer",
             "author": "MyName",
@@ -14,17 +16,20 @@
             "hardware": {
                 "fpga": "5CEBA4F23C8",
                 "clocks": [
-                    { "frequency": 50000000, "type": "sys" }
+                    {
+                        "frequency": 50000000,
+                        "type": "sys"
+                    }
                 ]
             },
-            "system": {
-                "file_slots": [
+            "openfpga": {
+                "data_slots": [
                     {
                         "id": 1,
                         "name": "image",
                         "required": true,
-                        "extension": "bin",
-                        "address": "0x40000000"
+                        "parameters": "0x40000000",
+                        "filename": "image.bin"
                     }
                 ]
             }

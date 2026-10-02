@@ -1,14 +1,9 @@
 {
     "platform": {
         "version": "1.0",
-        "metadata": {
-            "name": "Static Image Viewer",
-            "description": "Displays a high-res 800x800 true color image.",
-            "category": "Utility",
-            "subcategories": [],
-            "manufacturer": "Custom",
-            "year": 2026
-        }
+        "category": "Utility",
+        "name": "staticimage",
+        "lookup_id": "ap1"
     }
 }
 

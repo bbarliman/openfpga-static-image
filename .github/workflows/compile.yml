@@ -17,8 +17,8 @@ jobs:
         with:
           args: >
             sh -c "
-            quartus_sh --flow compile top && 
-            quartus_cpf -c build/top.sof SD_Card_Root/Cores/MyName.StaticImage/core.rbf
+            quartus_sh --flow compile top &&
+            quartus_cpf -c -g -m FPPX16 -d OFF build/top.sof SD_Card_Root/Cores/MyName.staticimage/core.rbf
             "
 
       - name: Upload Finished Files

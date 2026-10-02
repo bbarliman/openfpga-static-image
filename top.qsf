@@ -10,3 +10,31 @@ set_global_assignment -name OPTIMIZATION_MODE "BALANCED"
 set_global_assignment -name GENERATE_RBF_FILE ON
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
+set_global_assignment -name VERILOG_FILE src/top.v
+set_global_assignment -name VERILOG_FILE src/video_pipeline.v 
+
+# --- APF Clock & Reset Pins ---
+set_location_assignment PIN_H16 -to clk_sys
+set_location_assignment PIN_M16 -to reset_n[0]
+set_location_assignment PIN_N16 -to reset_n[1]
+
+# --- APF Target Video Scalar Outputs ---
+set_location_assignment PIN_V15 -to video_hs
+set_location_assignment PIN_W15 -to video_vs
+set_location_assignment PIN_Y16 -to video_de
+set_location_assignment PIN_AA16 -to video_rgb[0]
+set_location_assignment PIN_AB16 -to video_rgb[1]
+set_location_assignment PIN_AA15 -to video_rgb[2]
+set_location_assignment PIN_AB15 -to video_rgb[3]
+set_location_assignment PIN_Y14  -to video_rgb[4]
+set_location_assignment PIN_AA14 -to video_rgb[5]
+set_location_assignment PIN_AB14 -to video_rgb[6]
+set_location_assignment PIN_AA13 -to video_rgb[7]
+set_location_assignment PIN_AB13 -to video_rgb[8]
+set_location_assignment PIN_V13  -to video_rgb[9]
+set_location_assignment PIN_W13  -to video_rgb[10]
+set_location_assignment PIN_U13  -to video_rgb[11]
+set_location_assignment PIN_T13  -to video_rgb[12]
+set_location_assignment PIN_R12  -to video_rgb[13]
+set_location_assignment PIN_T12  -to video_rgb[14]
+set_location_assignment PIN_P12  -to video_rgb[15]
